@@ -24,7 +24,7 @@ FFMPEG
 ^^^^^^
 
 1. Install from https://www.gyan.dev/ffmpeg/builds/
-2. Add the bin folder that contains to path to ffmpeg.exe.
+2. Add the bin folder that contains ``ffmpeg.exe`` to system path, so that it is available on cmd.
 
 Details:
 
