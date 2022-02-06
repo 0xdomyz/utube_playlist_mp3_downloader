@@ -14,11 +14,11 @@ Youtube-dl python package
 
     pip install youtube-dl
 
-Details:
-
-This does all the work.
-
+This does all the work. Details:
 https://github.com/ytdl-org/youtube-dl
+
+Example direct usage:
+https://gist.github.com/0xdomyz/8e906350b913a8e61ec1fd87a801d25f
 
 FFMPEG
 ^^^^^^
@@ -26,11 +26,7 @@ FFMPEG
 1. Install from https://www.gyan.dev/ffmpeg/builds/
 2. Add the bin folder that contains ``ffmpeg.exe`` to system path, so that it is available on cmd.
 
-Details:
-
-It converts medio formats, in this case to mp3.
-
-https://ffmpeg.org/
+It converts medio formats, in this case to mp3. Details: https://ffmpeg.org/
 
 Usage
 -----
