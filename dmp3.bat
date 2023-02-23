@@ -19,6 +19,8 @@ echo.   end: playlist end number, optional
 echo.
 echo.For example:
 echo.    dmp3 starcraft_themes "https://www.youtube.com/playlist?list=PL82284CFB34DC70F3"
+echo.    dmp3 starcraft_themes "https://www.youtube.com/playlist?list=PL82284CFB34DC70F3" 2 3
+echo.    dmp3 starcraft_themes "https://www.youtube.com/watch?v=J0lPR-XAW3g"
 goto end
 
 :start
