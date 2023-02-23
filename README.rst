@@ -27,6 +27,8 @@ Usage
 -----
 
 #. Download the ``dmp3.bat`` file and put it into a folder. For example inside ``E:\\music``.
+   
+   Alternatively copy over the content and create a file with same name and extension as ``dmp3.bat``.
 #. Think of a name for the folder to put the playlist, for example: ``starcraft_themes``.
 #. Navigate to this location via command line, and run:
 
