@@ -17,8 +17,8 @@ Installation
 
 #. Install FFMPEG
 
-    #. Install from `ffmpeg download page <https://ffmpeg.org/download.html>`_
-    #. In case of windows, can use `installer <https://www.gyan.dev/ffmpeg/builds/>`_
+    #. Install from `ffmpeg download page <https://ffmpeg.org/download.html>`_.
+       In case of windows, can use `installer <https://www.gyan.dev/ffmpeg/builds/>`_
     #. Add the bin folder that contains ``ffmpeg.exe`` to system path, so that it is available on command line.
 
     It converts medio formats, in this case to mp3. `Details <https://ffmpeg.org/>`_
