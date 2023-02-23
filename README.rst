@@ -2,38 +2,35 @@
 Youtube Playlist MP3 Downloader
 ===============================
 
-Download youtube video or playlist into mp3 in a playlist folder. Also serve as a batch script example.
+Download youtube video or playlist into mp3 in a playlist folder.
 
 Installation
 ------------
 
-Youtube-dl python package
-^^^^^^^^^^^^^^^^^^^^^^^^^
+#. Install yt-dlp python package
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: console
 
-    pip install youtube-dl
+    pip install yt-dlp
 
-This does all the work. Details:
-https://github.com/ytdl-org/youtube-dl
+Details see `pypi link <https://pypi.org/project/yt-dlp/>`_
 
-Example direct usage:
-https://gist.github.com/0xdomyz/8e906350b913a8e61ec1fd87a801d25f
+#. Install FFMPEG
+^^^^^^^^^^^^^^^^^^^^^
 
-FFMPEG
-^^^^^^
+* Install from `ffmpeg download page <https://ffmpeg.org/download.html>`_
+* In case of windows, can use `installer <https://www.gyan.dev/ffmpeg/builds/>`_
+* Add the bin folder that contains ``ffmpeg.exe`` to system path, so that it is available on command line.
 
-1. Install from https://www.gyan.dev/ffmpeg/builds/
-2. Add the bin folder that contains ``ffmpeg.exe`` to system path, so that it is available on cmd.
-
-It converts medio formats, in this case to mp3. Details: https://ffmpeg.org/
+It converts medio formats, in this case to mp3. `Details <https://ffmpeg.org/>`_
 
 Usage
 -----
 
-1. Get this batch script and put it into a folder called something like: ``music``.
-2. Think of the folder to put the playlist, for example: ``starcraft_themes``.
-3. Navigate to this location via command line, and run:
+#. Download the ``dmp3.bat`` file and put it into a folder. For example inside ``E:\\music``.
+#. Think of a name for the folder to put the playlist, for example: ``starcraft_themes``.
+#. Navigate to this location via command line, and run:
 
    .. code-block:: console
    
@@ -55,7 +52,7 @@ Usage
    
        dmp3 starcraft_themes "https://www.youtube.com/watch?v=J0lPR-XAW3g"
 
-4. Results:
+#. Results:
 
    .. code-block:: text
    
@@ -67,7 +64,7 @@ Usage
                ├── Terran Briefing Room - Starcraft Soundtrack-eINBamhiMVw.mp3
                └── ...
 
-5. Help:
+#. Help:
 
    .. code-block:: console
    
