@@ -7,23 +7,21 @@ Download youtube video or playlist into mp3 in a playlist folder.
 Installation
 ------------
 
-Install yt-dlp python package
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#. Install yt-dlp python package
 
-.. code-block:: console
+    .. code-block:: console
 
-    pip install yt-dlp
+        pip install yt-dlp
 
-Details see `pypi link <https://pypi.org/project/yt-dlp/>`_
+    Details see `pypi link <https://pypi.org/project/yt-dlp/>`_
 
-Install FFMPEG
-^^^^^^^^^^^^^^^^^^^^^
+#. Install FFMPEG
 
-* Install from `ffmpeg download page <https://ffmpeg.org/download.html>`_
-* In case of windows, can use `installer <https://www.gyan.dev/ffmpeg/builds/>`_
-* Add the bin folder that contains ``ffmpeg.exe`` to system path, so that it is available on command line.
+    #. Install from `ffmpeg download page <https://ffmpeg.org/download.html>`_
+    #. In case of windows, can use `installer <https://www.gyan.dev/ffmpeg/builds/>`_
+    #. Add the bin folder that contains ``ffmpeg.exe`` to system path, so that it is available on command line.
 
-It converts medio formats, in this case to mp3. `Details <https://ffmpeg.org/>`_
+    It converts medio formats, in this case to mp3. `Details <https://ffmpeg.org/>`_
 
 Usage
 -----
