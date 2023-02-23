@@ -13,10 +13,12 @@ echo.Download youtube video or playlist into mp3 in a playlist folder
 echo.
 echo.usage: folder path start end
 echo.   folder: folder(create if not exist) to download into
-echo.   path: path to video
+echo.   path: path to video, often need to be quoted
 echo.   start: playlist start number, optional
 echo.   end: playlist end number, optional
 echo.
+echo.For example:
+echo.    dmp3 starcraft_themes "https://www.youtube.com/playlist?list=PL82284CFB34DC70F3"
 goto end
 
 :start
@@ -26,11 +28,11 @@ cd %folder%
 if [%3]==[] (goto case_no_start_end) else (goto case_start_end)
 
 :case_no_start_end
-youtube-dl -i -x --audio-format mp3 %2
+yt-dlp -i -x --audio-format mp3 %2
 goto end
 
 :case_start_end
-youtube-dl -i -x --audio-format mp3 --playlist-start %3 --playlist-end %4 %2
+yt-dlp -i -x --audio-format mp3 --playlist-start %3 --playlist-end %4 %2
 goto end
 
 :end
