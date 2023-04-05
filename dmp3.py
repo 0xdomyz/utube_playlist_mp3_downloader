@@ -57,10 +57,17 @@ But will not download the videos that are already downloaded.
 epilog = """
 Example:
 
+Entire playlist:
 python3.11 dmp3.py /mnt/d/media/music/starcraft_themes -w https://www.youtube.com/playlist?list=PL82284CFB34DC70F3
+Part of playlist:
 python3.11 dmp3.py /mnt/d/media/music/starcraft_themes -w https://www.youtube.com/playlist?list=PL82284CFB34DC70F3 -s 1 -e 10
+
+Refresh entire playlist:
 python3.11 dmp3.py /mnt/d/media/music/starcraft_themes
+Refresh part of playlist:
 python3.11 dmp3.py /mnt/d/media/music/starcraft_themes -s 1 -e 3
+
+Refresh all folders:
 python3.11 dmp3.py /mnt/d/media/music -r
 """
 epilog2 = """asdf"""
