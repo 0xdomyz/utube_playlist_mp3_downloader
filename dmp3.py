@@ -1,45 +1,134 @@
-# after import, use it to fetch items list from a youtube play list
+from argparse import ArgumentParser, RawTextHelpFormatter
+from pathlib import Path
 
-import yt_dlp
+from _internal import *
 
-playlist_url = "https://www.youtube.com/playlist?list=<playlist_id>"
-with yt_dlp.YoutubeDL({"flat_playlist": True}) as ydl:
-    playlist = ydl.extract_info(playlist_url, download=False)
-    for video in playlist["entries"]:
-        print(video["title"])
+argparser = ArgumentParser(formatter_class=RawTextHelpFormatter)
 
-# list out files from a location in python, compare to that list
+argparser.add_argument(
+    "folder",
+    type=Path,
+    help="Folder to store mp3 files",
+)
+argparser.add_argument(
+    "-w",
+    "--webpath",
+    type=str,
+    help="Webpath to download from, creates a .dmp3 file insdie folder to store webpath",
+    default=None,
+)
+argparser.add_argument(
+    "-s", "--start", type=int, help="Start index of the playlist", default=None
+)
+argparser.add_argument(
+    "-e", "--end", type=int, help="End index of the playlist", default=None
+)
+argparser.add_argument(
+    "-r",
+    "--refresh_folder_mode",
+    action="store_true",
+    help=(
+        "Refresh all mp3 folders in the folder, default is False.\n"
+        "In this mode, work through all sub folders with .mp3 inside, and download all new videos"
+    ),
+)
+argparser.add_argument(
+    "-m",
+    "--mp3",
+    type=bool,
+    help="Convert mp4 files to mp3 files in the folder (WIP)",
+    default=True,
+)
 
-import os
+description = """
+Download youtube video or playlist, convert to mp3, store into a folder.
 
-path1 = "/path/to/directory1"
-path2 = "/path/to/directory2"
+If folder not exists, creates a folder.
+Otherwise, uses the folder, and will only download new videos from the playlist.
 
-files1 = set(os.listdir(path1))
-files2 = set(os.listdir(path2))
+If webpath is provided, creates a .dmp3 file in the folder to store the webpath for future use.
+If not provided, uses the webpath in the .dmp3 file in the folder stored previously.
+If not provided and no .dmp3 file is found in the folder, exits.
 
-common_files = files1 & files2
-unique_files = files1 ^ files2
+If start and/or end are provided, download only the subset of the playlist.
+But will not download the videos that are already downloaded.
+"""
 
-print("Common Files:")
-for file in common_files:
-    print(file)
+epilog = """
+Example:
 
-print("Unique Files:")
-for file in unique_files:
-    print(file)
+python3.11 dmp3.py /mnt/d/media/music/starcraft_themes -w https://www.youtube.com/playlist?list=PL82284CFB34DC70F3
+python3.11 dmp3.py /mnt/d/media/music/starcraft_themes -w https://www.youtube.com/playlist?list=PL82284CFB34DC70F3 -s 1 -e 10
+python3.11 dmp3.py /mnt/d/media/music/starcraft_themes
+python3.11 dmp3.py /mnt/d/media/music/starcraft_themes -s 1 -e 3
+python3.11 dmp3.py /mnt/d/media/music -r
+"""
+epilog2 = """asdf"""
+
+argparser.description = description
+argparser.epilog = epilog
 
 
-# download the ones that are not already in the local list
+# main process
+def process_folder_and_webpath(
+    folder: Path, webpath: str, start: int, end: int, mp3: bool
+):
+    if not folder.exists():
+        folder.mkdir(parents=True)
+        existing_ids = []
+    else:
+        existing_ids = already_downloaded_ids(folder)
 
-import os
+    if webpath:
+        with open(folder / ".dmp3", "w") as f:
+            f.write(webpath)
+    else:
+        try:
+            with open(folder / ".dmp3", "r") as f:
+                webpath = f.read()
+        except FileNotFoundError:
+            print(
+                f"No webpath provided and no .dmp3 file found in the folder: {folder}"
+            )
+            return
 
-path = "/path/to/directory"
-local_files = set(os.listdir(path))
+    is_playlist: bool = "playlist" in webpath
 
-remote_files = ["file1.txt", "file2.txt", "file3.txt"]
+    if len(existing_ids) > 0 and is_playlist:
+        target_urls = fetch_items_from_list(webpath, start, end)
+        target_ids = ids_from_list(target_urls)
+        new_ids = list(set(target_ids) - set(existing_ids))
+        download_ids_and_convert_to_mp3(new_ids, folder)
+    else:
+        download_list_subset_and_convert_to_mp3(webpath, folder, start, end)
 
-for file in remote_files:
-    if file not in local_files:
-        with yt_dlp.YoutubeDL({"outtmpl": os.path.join(path, file)}) as ydl:
-            ydl.download(["https://www.youtube.com/watch?v=<video_id>"])
+
+if __name__ == "__main__":
+    args = argparser.parse_args()
+    folder = args.folder
+    webpath = args.webpath
+    start = args.start
+    end = args.end
+    refresh_folder_mode = args.refresh_folder_mode
+    mp3 = args.mp3
+
+    # refresh all folders mode
+    if refresh_folder_mode:
+        for sub_folder in folder.iterdir():
+            if sub_folder.is_dir() and (sub_folder / ".dmp3").exists():
+                process_folder_and_webpath(
+                    folder=sub_folder,
+                    webpath=None,
+                    start=None,
+                    end=None,
+                    mp3=mp3,
+                )
+    else:
+        # vanilla mode
+        process_folder_and_webpath(
+            folder=folder,
+            webpath=webpath,
+            start=start,
+            end=end,
+            mp3=mp3,
+        )
