@@ -48,7 +48,7 @@ Windows:
 
 .. code-block:: console
 
-    dmp3 "D:\media\music\game_theme\starcraft_terran" -w "https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy"
+    dmp3 "D:\media\music\game_theme\starcraft_terran" -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy
 
 
 API
