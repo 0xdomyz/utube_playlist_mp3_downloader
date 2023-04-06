@@ -1,18 +1,3 @@
-"""
-Entire playlist:
-python3.11 dmp3.py /mnt/d/media/music/starcraft_themes -w https://www.youtube.com/playlist?list=PL82284CFB34DC70F3
-Part of playlist:
-python3.11 dmp3.py /mnt/d/media/music/starcraft_themes -w https://www.youtube.com/playlist?list=PL82284CFB34DC70F3 -s 1 -e 10
-
-Refresh entire playlist:
-python3.11 dmp3.py /mnt/d/media/music/starcraft_themes
-Refresh part of playlist:
-python3.11 dmp3.py /mnt/d/media/music/starcraft_themes -s 1 -e 3
-
-Refresh all folders:
-python3.11 dmp3.py /mnt/d/media/music -r
-"""
-
 from pathlib import Path
 
 from terminal import run_cmd_on_path
@@ -55,32 +40,32 @@ def run(cmd: str):
 def test_entire_playlist():
     kill_folder()
     run(
-        f"python3.11 dmp3.py {_folder} -w {_playlist}",
+        f"dmp3 {_folder} -w {_playlist}",
     )
 
 
 def test_part_of_playlist():
     kill_folder()
     run(
-        f"python3.11 dmp3.py {_folder} -w {_playlist} -s 1 -e 2",
+        f"dmp3 {_folder} -w {_playlist} -s 1 -e 2",
     )
 
 
 def test_refresh_entire_playlist():
     kill_mp3()
     run(
-        f"python3.11 dmp3.py {_folder}",
+        f"dmp3 {_folder}",
     )
 
 
 def test_refresh_part_of_playlist():
     kill_mp3()
     run(
-        f"python3.11 dmp3.py {_folder} -s 1 -e 2",
+        f"dmp3 {_folder} -s 1 -e 2",
     )
 
 
 def test_refresh_all_folders():
     run(
-        f"python3.11 dmp3.py {_folder.parent} -r",
+        f"dmp3 {_folder.parent} -r",
     )
