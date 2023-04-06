@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dmp3"
+version = "0.0.3"
+authors = [
+  { name="0xdomyz", email="septemberwhyms@gmail.com" },
+]
+description = "Download youtube video or playlist, convert to mp3, store into a folder."
+readme = "README.rst"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows :: Windows 10",
+    "Operating System :: POSIX :: Linux",
+]
+dependencies = [
+  "pytube",
+  "yt-dlp",
+]
+
+[project.urls]
+homepage = "https://github.com/0xdomyz/utube_playlist_mp3_downloader"
+documentation = "https://github.com/0xdomyz/utube_playlist_mp3_downloader"
+"Bug Tracker" = "https://github.com/0xdomyz/utube_playlist_mp3_downloader/issues"
+
+[project.scripts]
+dmp3 = "dmp3.dmp3:cli"

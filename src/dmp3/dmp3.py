@@ -1,7 +1,7 @@
 from argparse import ArgumentParser, RawTextHelpFormatter
 from pathlib import Path
 
-from _internal import *
+from dmp3._internal import *
 
 argparser = ArgumentParser(formatter_class=RawTextHelpFormatter)
 
@@ -58,17 +58,17 @@ epilog = """
 Example:
 
 Entire playlist:
-python3.11 dmp3.py /mnt/d/media/music/starcraft_themes -w https://www.youtube.com/playlist?list=PL82284CFB34DC70F3
+dmp3 /mnt/d/media/music/game_theme/starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy
 Part of playlist:
-python3.11 dmp3.py /mnt/d/media/music/starcraft_themes -w https://www.youtube.com/playlist?list=PL82284CFB34DC70F3 -s 1 -e 10
+dmp3 /mnt/d/media/music/game_theme/starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy -s 1 -e 2
 
 Refresh entire playlist:
-python3.11 dmp3.py /mnt/d/media/music/starcraft_themes
+dmp3 /mnt/d/media/music/game_theme/starcraft_terran
 Refresh part of playlist:
-python3.11 dmp3.py /mnt/d/media/music/starcraft_themes -s 1 -e 3
+dmp3 /mnt/d/media/music/game_theme/starcraft_terran -e 3
 
 Refresh all folders:
-python3.11 dmp3.py /mnt/d/media/music -r
+dmp3 /mnt/d/media/music/game_theme -r
 """
 epilog2 = """asdf"""
 
@@ -110,15 +110,14 @@ def process_folder_and_webpath(
         download_list_subset_and_convert_to_mp3(webpath, folder, start, end)
 
 
-if __name__ == "__main__":
-    args = argparser.parse_args()
-    folder = args.folder
-    webpath = args.webpath
-    start = args.start
-    end = args.end
-    refresh_folder_mode = args.refresh_folder_mode
-    mp3 = args.mp3
-
+def dmp3(
+    folder: Path,
+    webpath: str = None,
+    start: int = None,
+    end: int = None,
+    refresh_folder_mode: bool = False,
+    mp3: bool = True,
+):
     # refresh all folders mode
     if refresh_folder_mode:
         for sub_folder in folder.iterdir():
@@ -139,3 +138,19 @@ if __name__ == "__main__":
             end=end,
             mp3=mp3,
         )
+
+
+def cli():
+    args = argparser.parse_args()
+    folder = args.folder
+    webpath = args.webpath
+    start = args.start
+    end = args.end
+    refresh_folder_mode = args.refresh_folder_mode
+    mp3 = args.mp3
+
+    dmp3(folder, webpath, start, end, refresh_folder_mode, mp3)
+
+
+if __name__ == "__main__":
+    cli()
