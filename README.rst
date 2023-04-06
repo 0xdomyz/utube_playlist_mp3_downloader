@@ -50,6 +50,25 @@ Windows:
 
     dmp3 "D:\media\music\game_theme\starcraft_terran" -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy
 
+Effect in target location:
+
+.. code-block:: text
+
+    game_theme
+    ├── starcraft_terran
+    │   ├── StarCraft - Terran Theme 1-mD4GbGmvNRc.mp3
+    │   ├── Starcraft 2 Soundtrack - Terran 01-zAS8KivZX5s.mp3
+    │   ├── Starcraft 2 Soundtrack - Terran 02-sNbTg0Li36k.mp3
+    │   ├── Starcraft 2 Soundtrack - Terran 03-dssNa11htIM.mp3
+    │   ├── Starcraft 2 Soundtrack - Terran 04-4YfQjho2IOk.mp3
+    │   ├── Starcraft 2 Soundtrack - Terran 05-fQluJBSXM5I.mp3
+    │   ├── Terran Theme 2 - Starcraft Soundtrack-_R1QLIo16DY.mp3
+    │   ├── Terran Theme 3 - Starcraft Soundtrack-xcEHDqji74A.mp3
+    │   └── Terran Theme 4 (Brood War) - Starcraft Soundtrack-l9XSZw67QpY.mp3
+    ├── diablo
+    │   ├── Diablo - Ending-4XDfoh2BQlU.mp3
+    │   ├── Diablo - Intro-oFds4KWQ3kM.mp3
+    ...
 
 API
 -------
