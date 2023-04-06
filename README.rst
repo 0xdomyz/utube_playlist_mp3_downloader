@@ -22,7 +22,7 @@ Installation
 
         pip install dmp3
 
-#. Install `FFMPEG <https://ffmpeg.org/>`_, it converts medio formats. 
+#. Install `FFMPEG <https://ffmpeg.org/>`_, it converts media formats. 
 
     - Linux
 
