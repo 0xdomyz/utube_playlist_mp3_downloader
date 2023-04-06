@@ -30,4 +30,4 @@ documentation = "https://github.com/0xdomyz/utube_playlist_mp3_downloader"
 "Bug Tracker" = "https://github.com/0xdomyz/utube_playlist_mp3_downloader/issues"
 
 [project.scripts]
-dmp3 = "dmp3.dmp3:main"
+dmp3 = "dmp3.dmp3:cli"

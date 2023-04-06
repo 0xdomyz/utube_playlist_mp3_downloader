@@ -110,15 +110,14 @@ def process_folder_and_webpath(
         download_list_subset_and_convert_to_mp3(webpath, folder, start, end)
 
 
-def main():
-    args = argparser.parse_args()
-    folder = args.folder
-    webpath = args.webpath
-    start = args.start
-    end = args.end
-    refresh_folder_mode = args.refresh_folder_mode
-    mp3 = args.mp3
-
+def dmp3(
+    folder: Path,
+    webpath: str = None,
+    start: int = None,
+    end: int = None,
+    refresh_folder_mode: bool = False,
+    mp3: bool = True,
+):
     # refresh all folders mode
     if refresh_folder_mode:
         for sub_folder in folder.iterdir():
@@ -141,5 +140,17 @@ def main():
         )
 
 
+def cli():
+    args = argparser.parse_args()
+    folder = args.folder
+    webpath = args.webpath
+    start = args.start
+    end = args.end
+    refresh_folder_mode = args.refresh_folder_mode
+    mp3 = args.mp3
+
+    dmp3(folder, webpath, start, end, refresh_folder_mode, mp3)
+
+
 if __name__ == "__main__":
-    main()
+    cli()
