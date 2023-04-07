@@ -5,6 +5,18 @@ from typing import List
 import pytube
 import yt_dlp
 
+
+def read_saved_info(path: Path):
+    with open(path, "r") as f:
+        webpath = f.read()
+    return webpath
+
+
+def save_info(info, path: Path):
+    with open(path, "w") as f:
+        f.write(info)
+
+
 HEADERS = {
     "format": "bestaudio/best",
     "postprocessors": [
@@ -19,20 +31,21 @@ HEADERS = {
 }
 
 
-# def fetch_items_from_list(
-#     webpath: str, start: int = None, end: int = None
-# ) -> List[str]:
-#     headers = {
-#         "flat_playlist": True,
-#         "age_limit": 18,
-#     }
-#     if start is not None:
-#         headers["playliststart"] = start
-#     if end is not None:
-#         headers["playlistend"] = end
-#     with yt_dlp.YoutubeDL(headers) as ydl:
-#         playlist = ydl.extract_info(webpath, download=False)
-#         return [video["webpage_url"] for video in playlist["entries"]]
+def fetch_items_from_channel(
+    webpath: str, start: int = None, end: int = None
+) -> List[str]:
+    headers = {
+        "flat_playlist": True,
+        "age_limit": 18,
+        "ignoreerrors": True,
+    }
+    if start is not None:
+        headers["playliststart"] = start
+    if end is not None:
+        headers["playlistend"] = end
+    with yt_dlp.YoutubeDL(headers) as ydl:
+        playlist = ydl.extract_info(webpath, download=False)
+        return [video["webpage_url"] for video in playlist["entries"]]
 
 
 def fetch_items_from_list(
@@ -78,6 +91,44 @@ def ids_from_list(target_urls: List[str]) -> List[str]:
     # fetch chars after ?v=, and up to end of string
     target_ids = [re.findall(r"\?v=([^=]*)$", url)[0] for url in target_urls]
     return target_ids
+
+
+def id_from_video_webpath(webpath: str) -> str:
+    # fetch 11 chars after ?v=
+    target_id = re.findall(r"\?v=([^=]{11})", webpath)[0]
+    return target_id
+
+
+def parse_webpath(webpath: str) -> str:
+    """
+    Parse webpath archetype:
+
+    video:
+    https://www.youtube.com/watch?v=mD4GbGmvNRc&list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy&index=2&ab_channel=Katrulzin
+    https://www.youtube.com/watch?v=zAS8KivZX5s&ab_channel=nudl3r
+
+    playlist:
+    https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy
+
+    channel's video list:
+    https://www.youtube.com/@Diablo/videos
+    """
+    if webpath is None:
+        raise ValueError("webpath cannot be None")
+
+    if "https://www.youtube.com/" not in webpath:
+        raise ValueError(f"https://www.youtube.com/ not in: {webpath}")
+
+    if "watch?v=" in webpath:
+        webpath_type = "video"
+    elif "playlist?list=" in webpath:
+        webpath_type = "playlist"
+    elif "/@" in webpath and "/videos" in webpath:
+        webpath_type = "channel"
+    else:
+        raise ValueError(f"Unrecognized webpath: {webpath}")
+
+    return webpath_type
 
 
 SAVE_FILE_FORMAT = "%(title)s-%(id)s.%(ext)s"

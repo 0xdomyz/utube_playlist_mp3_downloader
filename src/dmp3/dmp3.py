@@ -79,36 +79,51 @@ argparser.epilog = epilog
 
 # main process
 def process_folder_and_webpath(
-    folder: Path, webpath: str, start: int, end: int, mp3: bool
+    folder: Path,
+    webpath: str = None,
+    start: int = None,
+    end: int = None,
+    mp3: bool = True,
 ):
+    # breakpoint()
+
     if not folder.exists():
         folder.mkdir(parents=True)
-        existing_ids = []
-    else:
-        existing_ids = already_downloaded_ids(folder)
 
-    if webpath:
-        with open(folder / ".dmp3", "w") as f:
-            f.write(webpath)
-    else:
+    existing_ids = already_downloaded_ids(folder)
+
+    # get webpath
+    # save webpath
+    if webpath is None:
         try:
-            with open(folder / ".dmp3", "r") as f:
-                webpath = f.read()
+            webpath = read_saved_info(folder / ".dmp3")
         except FileNotFoundError:
-            print(
+            raise Exception(
                 f"No webpath provided and no .dmp3 file found in the folder: {folder}"
             )
-            return
-
-    is_playlist: bool = "playlist" in webpath
-
-    if len(existing_ids) > 0 and is_playlist:
-        target_urls = fetch_items_from_list(webpath, start, end)
-        target_ids = ids_from_list(target_urls)
-        new_ids = list(set(target_ids) - set(existing_ids))
-        download_ids_and_convert_to_mp3(new_ids, folder)
     else:
-        download_list_subset_and_convert_to_mp3(webpath, folder, start, end)
+        save_info(info=webpath, path=folder / ".dmp3")
+
+    # logics
+    webpath_type = parse_webpath(webpath)
+
+    if webpath_type == "video":
+        id = id_from_video_webpath(webpath)
+        if id not in existing_ids:
+            download_ids_and_convert_to_mp3([id], folder)
+    elif webpath_type in ["playlist", "channel"]:
+        if len(existing_ids) > 0:
+            if webpath_type == "playlist":
+                target_urls = fetch_items_from_list(webpath, start, end)
+            else:
+                target_urls = fetch_items_from_channel(webpath, start, end)
+            target_ids = ids_from_list(target_urls)
+            new_ids = list(set(target_ids) - set(existing_ids))
+            download_ids_and_convert_to_mp3(new_ids, folder)
+        else:
+            download_list_subset_and_convert_to_mp3(webpath, folder, start, end)
+    else:
+        raise ValueError(f"Unknown webpath type: {webpath_type}")
 
 
 def dmp3(
@@ -125,9 +140,6 @@ def dmp3(
             if sub_folder.is_dir() and (sub_folder / ".dmp3").exists():
                 process_folder_and_webpath(
                     folder=sub_folder,
-                    webpath=None,
-                    start=None,
-                    end=None,
                     mp3=mp3,
                 )
     else:
@@ -142,6 +154,7 @@ def dmp3(
 
 
 def cli():
+    # todo pass args
     args = argparser.parse_args()
     folder = args.folder
     webpath = args.webpath
