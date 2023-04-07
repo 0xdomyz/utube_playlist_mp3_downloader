@@ -3,69 +3,101 @@ from pathlib import Path
 from terminal import run_cmd_on_path
 
 _playlist = "https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy"
-_folder = Path("/mnt/d/media/music/game_theme/starcraft_terran")
+_folder = Path(
+    "/home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir/starcraft_terran"
+)
+_folder2 = Path(
+    "/home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir/diablo1"
+)
 # __file__ = "test_wsl.py"
 _tool_dir = Path(__file__).resolve().parents[1]
 
 
-def kill_folder():
-    try:
-        run_cmd_on_path(f"rm -rf {_folder.name}", _folder.parent)
-        run_cmd_on_path(f"echo {_folder.name} killed >> tests/test.log", _tool_dir)
-        run_cmd_on_path(f"echo >> tests/test.log", _tool_dir)
-        run_cmd_on_path(f"echo >> tests/test.log", _tool_dir)
-        run_cmd_on_path(f"echo >> tests/test.log", _tool_dir)
-    except Exception:
-        pass
+# iterate over all files and folders and delete them
+def kill_dir(path: Path):
+    if Path(path).exists():
+        for file in Path(path).glob("*"):
+            if file.is_dir():
+                kill_dir(file)
+            else:
+                file.unlink()
+        Path(path).rmdir()
 
 
-def kill_mp3():
-    try:
-        run_cmd_on_path(f"rm -rf *.mp3", _folder)
-        run_cmd_on_path(f"echo {_folder.name} mp3 killed >> tests/test.log", _tool_dir)
-        run_cmd_on_path(f"echo >> tests/test.log", _tool_dir)
-        run_cmd_on_path(f"echo >> tests/test.log", _tool_dir)
-        run_cmd_on_path(f"echo >> tests/test.log", _tool_dir)
-    except Exception:
-        pass
+def kill_mp3(path: Path, n: int = None):
+    # remove all if n None
+    i = 0
+    for file in Path(path).glob("*.mp3"):
+        file.unlink()
+        i += 1
+        if n is not None and i >= n:
+            break
+
+
+def number_of_mp3_files(path: Path):
+    return len(list(Path(path).glob("*.mp3")))
 
 
 def run(cmd: str):
     run_cmd_on_path(f"echo {cmd} >> tests/test.log", _tool_dir)
-    run_cmd_on_path(f"echo >> tests/test.log", _tool_dir)
-    run_cmd_on_path(f"echo >> tests/test.log", _tool_dir)
+    run_cmd_on_path(f"echo '' >> tests/test.log", _tool_dir)
+    run_cmd_on_path(f"echo '' >> tests/test.log", _tool_dir)
     run_cmd_on_path(f"{cmd} >> tests/test.log", _tool_dir)
 
 
-def test_entire_playlist():
-    kill_folder()
-    run(
-        f"dmp3 {_folder} -w {_playlist}",
-    )
+# todo better fixtures
+# no sequence dependency
 
 
 def test_part_of_playlist():
-    kill_folder()
+    kill_dir(_folder)
     run(
         f"dmp3 {_folder} -w {_playlist} -s 1 -e 2",
     )
 
+    assert Path(_folder).exists()
+    assert Path(_folder / ".dmp3").exists()
+    assert number_of_mp3_files(_folder) == 2
+
+
+def test_entire_playlist():
+    kill_dir(_folder)
+    run(
+        f"dmp3 {_folder} -w {_playlist}",
+    )
+
+    assert Path(_folder).exists()
+    assert Path(_folder / ".dmp3").exists()
+    assert number_of_mp3_files(_folder) >= 3
+
+
+def test_refresh_part_of_playlist():
+    kill_mp3(_folder)
+    run(
+        f"dmp3 {_folder} -e 2",
+    )
+    assert number_of_mp3_files(_folder) == 2
+
 
 def test_refresh_entire_playlist():
-    kill_mp3()
+    kill_mp3(_folder)
     run(
         f"dmp3 {_folder}",
     )
 
-
-def test_refresh_part_of_playlist():
-    kill_mp3()
-    run(
-        f"dmp3 {_folder} -s 1 -e 2",
-    )
+    assert number_of_mp3_files(_folder) >= 3
 
 
 def test_refresh_all_folders():
+    n = number_of_mp3_files(_folder)
+    n2 = number_of_mp3_files(_folder2)
+
+    kill_mp3(_folder, 2)
+    kill_mp3(_folder2, 2)
+
     run(
         f"dmp3 {_folder.parent} -r",
     )
+
+    assert number_of_mp3_files(_folder) == n
+    assert number_of_mp3_files(_folder2) == n2
