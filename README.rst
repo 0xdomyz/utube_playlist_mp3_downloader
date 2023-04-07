@@ -2,13 +2,14 @@
 DMP3
 ===============================
 
-Download youtube video or playlist, convert to mp3, store into a folder.
+Download youtube video or playlist or channel, convert to mp3, store into a folder.
 
 Features:
 
 - Download all or subset of playlist
-- Download only new playlist additions, once local storage folder is created
-- Refresh local storage folder without respecifying link to playlist
+- Download all or most recent n videos from channel
+- Download only additional items, once local storage folder is created
+- Refresh local storage folder with saved parameters
 - Refresh multiple local storage folders
 
 Installation
@@ -78,7 +79,7 @@ Example results:
         ├── Terran Theme 3 - Starcraft Soundtrack-xcEHDqji74A.mp3
         └── Terran Theme 4 (Brood War) - Starcraft Soundtrack-l9XSZw67QpY.mp3
 
-Refresh multiple local storage folders, each tracking a playlist:
+Refresh multiple local storage folders, each tracking a playlist or a channel:
 
 .. code-block:: console
 
@@ -105,17 +106,16 @@ API
    
         usage: dmp3 [-h] [-w WEBPATH] [-s START] [-e END] [-r] [-m MP3] folder
 
-        Download youtube video or playlist, convert to mp3, store into a folder.
+        Download youtube video or playlist or channel, convert to mp3, store into a folder.
 
-        If folder not exists, creates a folder.
-        Otherwise, uses the folder, and will only download new videos from the playlist.
+        Creates folder if not exists.
+        Otherwise only download additional mp3 into the folder.
 
-        If webpath is provided, creates a .dmp3 file in the folder to store the webpath for future use.
-        If not provided, uses the webpath in the .dmp3 file in the folder stored previously.
-        If not provided and no .dmp3 file is found in the folder, exits.
+        If webpath is provided, creates a .dmp3 file in the folder to store parameters.
+        If not provided, uses saved parameter.
 
-        If start and/or end are provided, download only the subset of the playlist.
-        But will not download the videos that are already downloaded.
+        If start and/or end are provided, download only the subset in addition to already downloaded.
+        If not provided, uses saved parameters if any.
 
         positional arguments:
         folder                Folder to store mp3 files
@@ -140,12 +140,16 @@ API
         Part of playlist:
         dmp3 starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy -s 1 -e 2
 
-        Refresh entire playlist:
+        Most recent 5 videos from channel:
+        dmp3 diablo -w https://www.youtube.com/@Diablo/videos -e 5
+
+        Refresh entire or part of playlist:
         dmp3 starcraft_terran
+        dmp3 starcraft_terran -s 5
 
-        Refresh part of playlist:
-        dmp3 starcraft_terran -e 2
+        Refresh channel using saved parameters:
+        dmp3 diablo
 
-        Refresh all folders:
+        Refresh all storage folders, each with saved parameters:
         cd /home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir
         dmp3 . -r
