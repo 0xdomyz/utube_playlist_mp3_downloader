@@ -24,16 +24,18 @@ Installation
 
 #. Install `FFMPEG <https://ffmpeg.org/>`_, it converts media formats. 
 
-    - Linux
+    Linux
 
-        .. code-block:: console
+    .. code-block:: console
 
-            sudo apt install ffmpeg
+        sudo apt install ffmpeg
 
-    - Windows
+    Windows
     
-        #. Install from `ffmpeg download page <https://ffmpeg.org/download.html>`_, or `windows installer <https://www.gyan.dev/ffmpeg/builds/>`_.
-        #. Add the bin folder that contains ``ffmpeg.exe`` to system path, so that it is available on command line.
+    #. Install from `ffmpeg download page <https://ffmpeg.org/download.html>`_,
+       most likely use `windows installer <https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip>`_.
+    #. Add the bin folder that contains ``ffmpeg.exe`` to system path,
+       so that it is available on command line.
 
 Simple Usage
 --------------
@@ -69,6 +71,19 @@ Effect in target location:
     │   ├── Diablo - Ending-4XDfoh2BQlU.mp3
     │   ├── Diablo - Intro-oFds4KWQ3kM.mp3
     ...
+
+Usage in python script:
+
+.. code-block:: Python
+
+        from dmp3.dmp3 import dmp3
+        from pathlib import Path
+
+        folder = Path("/mnt/d/media/music/game_theme/starcraft_terran")
+        webpath = "https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy"
+
+        dmp3(folder=folder, webpath=webpath, start=None, end=None)
+        dmp3(folder=folder, webpath=webpath, start=1, end=3)
 
 API
 -------
@@ -108,11 +123,13 @@ API
 
         Entire playlist:
         dmp3 /mnt/d/media/music/game_theme/starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy
+
         Part of playlist:
         dmp3 /mnt/d/media/music/game_theme/starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy -s 1 -e 2
 
         Refresh entire playlist:
         dmp3 /mnt/d/media/music/game_theme/starcraft_terran
+
         Refresh part of playlist:
         dmp3 /mnt/d/media/music/game_theme/starcraft_terran -e 3
 
