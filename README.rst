@@ -44,7 +44,8 @@ Linux:
 
 .. code-block:: console
 
-    dmp3 /mnt/d/media/music/game_theme/starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy
+    cd /home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir
+    dmp3 starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy
 
 Windows:
 
@@ -52,25 +53,30 @@ Windows:
 
     dmp3 "D:\media\music\game_theme\starcraft_terran" -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy
 
-Effect in target location:
+Example results:
 
 .. code-block:: text
 
-    game_theme
-    ├── starcraft_terran
-    │   ├── StarCraft - Terran Theme 1-mD4GbGmvNRc.mp3
-    │   ├── Starcraft 2 Soundtrack - Terran 01-zAS8KivZX5s.mp3
-    │   ├── Starcraft 2 Soundtrack - Terran 02-sNbTg0Li36k.mp3
-    │   ├── Starcraft 2 Soundtrack - Terran 03-dssNa11htIM.mp3
-    │   ├── Starcraft 2 Soundtrack - Terran 04-4YfQjho2IOk.mp3
-    │   ├── Starcraft 2 Soundtrack - Terran 05-fQluJBSXM5I.mp3
-    │   ├── Terran Theme 2 - Starcraft Soundtrack-_R1QLIo16DY.mp3
-    │   ├── Terran Theme 3 - Starcraft Soundtrack-xcEHDqji74A.mp3
-    │   └── Terran Theme 4 (Brood War) - Starcraft Soundtrack-l9XSZw67QpY.mp3
-    ├── diablo
-    │   ├── Diablo - Ending-4XDfoh2BQlU.mp3
-    │   ├── Diablo - Intro-oFds4KWQ3kM.mp3
-    ...
+    mp3_dir/
+    ├── diablo1
+    │   ├── .dmp3
+    │   ├── Diablo 1 [OST] - 01 - Intro-Y7P7vrvEQYc.mp3
+    │   ├── Diablo 1 [OST] - 02 - Town-SEpydfXj87M.mp3
+    │   ├── Diablo 1 [OST] - 03 - Dungeon-yQCg-uHOrZk.mp3
+    │   ├── Diablo 1 [OST] - 04 - Catacombs-FPQPJwVX-60.mp3
+    │   ├── Diablo 1 [OST] - 05 - Caves-J9OIyH21ZKo.mp3
+    │   └── Diablo 1 [OST] - 06 - Hell-5PBG92gkL7I.mp3
+    └── starcraft_terran
+        ├── .dmp3
+        ├── StarCraft - Terran Theme 1-mD4GbGmvNRc.mp3
+        ├── Starcraft 2 Soundtrack - Terran 01-zAS8KivZX5s.mp3
+        ├── Starcraft 2 Soundtrack - Terran 02-sNbTg0Li36k.mp3
+        ├── Starcraft 2 Soundtrack - Terran 03-dssNa11htIM.mp3
+        ├── Starcraft 2 Soundtrack - Terran 04-4YfQjho2IOk.mp3
+        ├── Starcraft 2 Soundtrack - Terran 05-fQluJBSXM5I.mp3
+        ├── Terran Theme 2 - Starcraft Soundtrack-_R1QLIo16DY.mp3
+        ├── Terran Theme 3 - Starcraft Soundtrack-xcEHDqji74A.mp3
+        └── Terran Theme 4 (Brood War) - Starcraft Soundtrack-l9XSZw67QpY.mp3
 
 Usage in python script:
 
@@ -79,11 +85,11 @@ Usage in python script:
         from dmp3.dmp3 import dmp3
         from pathlib import Path
 
-        folder = Path("/mnt/d/media/music/game_theme/starcraft_terran")
+        folder = Path("/home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir/starcraft_terran")
         webpath = "https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy"
 
-        dmp3(folder=folder, webpath=webpath, start=None, end=None)
-        dmp3(folder=folder, webpath=webpath, start=1, end=3)
+        dmp3(folder=folder)
+        dmp3(folder=folder, webpath=webpath, start=1, end=3, refresh_folder_mode=False, mp3=True)
 
 API
 -------
@@ -116,22 +122,23 @@ API
         -e END, --end END     End index of the playlist
         -r, --refresh_folder_mode
                                 Refresh all mp3 folders in the folder, default is False.
-                                In this mode, work through all sub folders with .mp3 inside, and download all new videos
         -m MP3, --mp3 MP3     Convert mp4 files to mp3 files in the folder (WIP)
 
-        Example:
+        Examples:
 
         Entire playlist:
-        dmp3 /mnt/d/media/music/game_theme/starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy
+        cd /home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir
+        dmp3 starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy
 
         Part of playlist:
-        dmp3 /mnt/d/media/music/game_theme/starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy -s 1 -e 2
+        dmp3 starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy -s 1 -e 2
 
         Refresh entire playlist:
-        dmp3 /mnt/d/media/music/game_theme/starcraft_terran
+        dmp3 starcraft_terran
 
         Refresh part of playlist:
-        dmp3 /mnt/d/media/music/game_theme/starcraft_terran -e 3
+        dmp3 starcraft_terran -e 2
 
         Refresh all folders:
-        dmp3 /mnt/d/media/music/game_theme -r
+        cd /home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir
+        dmp3 . -r

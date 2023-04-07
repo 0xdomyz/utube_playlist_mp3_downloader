@@ -1,3 +1,6 @@
+# testing dirs
+tests/mp3_dir/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

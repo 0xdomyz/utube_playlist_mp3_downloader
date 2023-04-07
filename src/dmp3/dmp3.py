@@ -27,10 +27,7 @@ argparser.add_argument(
     "-r",
     "--refresh_folder_mode",
     action="store_true",
-    help=(
-        "Refresh all mp3 folders in the folder, default is False.\n"
-        "In this mode, work through all sub folders with .mp3 inside, and download all new videos"
-    ),
+    help=("Refresh all mp3 folders in the folder, default is False."),
 )
 argparser.add_argument(
     "-m",
@@ -55,24 +52,26 @@ But will not download the videos that are already downloaded.
 """
 
 epilog = """
-Example:
+Examples:
 
 Entire playlist:
-dmp3 /mnt/d/media/music/game_theme/starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy
+cd /home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir
+dmp3 starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy
 
 Part of playlist:
-dmp3 /mnt/d/media/music/game_theme/starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy -s 1 -e 2
+dmp3 starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy -s 1 -e 2
 
 Refresh entire playlist:
-dmp3 /mnt/d/media/music/game_theme/starcraft_terran
+dmp3 starcraft_terran
 
 Refresh part of playlist:
-dmp3 /mnt/d/media/music/game_theme/starcraft_terran -e 3
+dmp3 starcraft_terran -e 2
 
 Refresh all folders:
-dmp3 /mnt/d/media/music/game_theme -r
+cd /home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir
+dmp3 . -r
+
 """
-epilog2 = """asdf"""
 
 argparser.description = description
 argparser.epilog = epilog
