@@ -59,11 +59,13 @@ Example:
 
 Entire playlist:
 dmp3 /mnt/d/media/music/game_theme/starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy
+
 Part of playlist:
 dmp3 /mnt/d/media/music/game_theme/starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy -s 1 -e 2
 
 Refresh entire playlist:
 dmp3 /mnt/d/media/music/game_theme/starcraft_terran
+
 Refresh part of playlist:
 dmp3 /mnt/d/media/music/game_theme/starcraft_terran -e 3
 
