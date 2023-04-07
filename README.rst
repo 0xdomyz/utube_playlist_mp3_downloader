@@ -15,7 +15,7 @@ Features:
 Installation
 ------------
 
-#. Install Python 3.9, 3.10, or 3.11.
+#. Install Python 3.9 or 3.10 or 3.11.
 
 #. Install package from pypi.
 
