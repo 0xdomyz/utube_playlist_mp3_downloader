@@ -40,12 +40,29 @@ def fetch_items_from_list(
 ) -> List[str]:
     playlist = pytube.Playlist(playlist_url)
     res = playlist.video_urls
+    res_len = len(res)
+
+    # bound start
+    if start is not None:
+        if start > res_len:
+            return []
+        elif start < 1:
+            start = 0
+    # bound end
+    if end is not None:
+        if end > res_len:
+            end = res_len
+        elif end < 1:
+            return []
+
+    # slice, index start from 1
     if start is not None and end is not None:
-        res = res[start:end]
+        res = res[start - 1 : end]
     elif start is not None:
-        res = res[start:]
+        res = res[start - 1 :]
     elif end is not None:
         res = res[:end]
+
     return res
 
 
