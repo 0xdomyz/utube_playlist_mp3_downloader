@@ -3,18 +3,19 @@ from pathlib import Path
 from typing import List
 
 import pytube
+import yaml
 import yt_dlp
 
 
 def read_saved_info(path: Path):
     with open(path, "r") as f:
-        webpath = f.read()
-    return webpath
+        info = yaml.safe_load(f)
+    return info
 
 
 def save_info(info, path: Path):
     with open(path, "w") as f:
-        f.write(info)
+        yaml.safe_dump(info, f)
 
 
 HEADERS = {

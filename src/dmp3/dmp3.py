@@ -38,17 +38,16 @@ argparser.add_argument(
 )
 
 description = """
-Download youtube video or playlist, convert to mp3, store into a folder.
+Download youtube video or playlist or channel, convert to mp3, store into a folder.
 
-If folder not exists, creates a folder.
-Otherwise, uses the folder, and will only download new videos from the playlist.
+Creates folder if not exists.
+Otherwise only download additional mp3 into the folder.
 
-If webpath is provided, creates a .dmp3 file in the folder to store the webpath for future use.
-If not provided, uses the webpath in the .dmp3 file in the folder stored previously.
-If not provided and no .dmp3 file is found in the folder, exits.
+If webpath is provided, creates a .dmp3 file in the folder to store parameters.
+If not provided, uses saved parameter.
 
-If start and/or end are provided, download only the subset of the playlist.
-But will not download the videos that are already downloaded.
+If start and/or end are provided, download only the subset in addition to already downloaded.
+If not provided, uses saved parameters if any.
 """
 
 epilog = """
@@ -61,13 +60,17 @@ dmp3 starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4G
 Part of playlist:
 dmp3 starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy -s 1 -e 2
 
-Refresh entire playlist:
+Most recent 5 videos from channel:
+dmp3 diablo -w https://www.youtube.com/@Diablo/videos -e 5
+
+Refresh entire or part of playlist:
 dmp3 starcraft_terran
+dmp3 starcraft_terran -s 5
 
-Refresh part of playlist:
-dmp3 starcraft_terran -e 2
+Refresh channel using saved parameters:
+dmp3 diablo
 
-Refresh all folders:
+Refresh all storage folders, each with saved parameters:
 cd /home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir
 dmp3 . -r
 
@@ -79,30 +82,36 @@ argparser.epilog = epilog
 
 # main process
 def process_folder_and_webpath(
-    folder: Path,
-    webpath: str = None,
-    start: int = None,
-    end: int = None,
-    mp3: bool = True,
+    **kwargs,
 ):
     # breakpoint()
 
+    folder = kwargs["folder"]
+    webpath = kwargs["webpath"]
+    start = kwargs["start"]
+    end = kwargs["end"]
+    mp3 = kwargs["mp3"]
+
+    # folder
     if not folder.exists():
         folder.mkdir(parents=True)
-
     existing_ids = already_downloaded_ids(folder)
 
-    # get webpath
-    # save webpath
+    # webpath
     if webpath is None:
         try:
-            webpath = read_saved_info(folder / ".dmp3")
+            info = read_saved_info(folder / ".dmp3")
+            webpath = info["webpath"]
+            start = info["start"] if "start" in info and start is None else start
+            end = info["end"] if "end" in info and end is None else end
         except FileNotFoundError:
             raise Exception(
                 f"No webpath provided and no .dmp3 file found in the folder: {folder}"
             )
     else:
-        save_info(info=webpath, path=folder / ".dmp3")
+        info = kwargs.copy()
+        info["folder"] = str(folder)
+        save_info(info=info, path=folder / ".dmp3")
 
     # logics
     webpath_type = parse_webpath(webpath)
@@ -140,6 +149,9 @@ def dmp3(
             if sub_folder.is_dir() and (sub_folder / ".dmp3").exists():
                 process_folder_and_webpath(
                     folder=sub_folder,
+                    webpath=None,
+                    start=None,
+                    end=None,
                     mp3=mp3,
                 )
     else:
@@ -154,16 +166,8 @@ def dmp3(
 
 
 def cli():
-    # todo pass args
     args = argparser.parse_args()
-    folder = args.folder
-    webpath = args.webpath
-    start = args.start
-    end = args.end
-    refresh_folder_mode = args.refresh_folder_mode
-    mp3 = args.mp3
-
-    dmp3(folder, webpath, start, end, refresh_folder_mode, mp3)
+    dmp3(**vars(args))
 
 
 if __name__ == "__main__":
