@@ -78,6 +78,13 @@ Example results:
         ├── Terran Theme 3 - Starcraft Soundtrack-xcEHDqji74A.mp3
         └── Terran Theme 4 (Brood War) - Starcraft Soundtrack-l9XSZw67QpY.mp3
 
+Refresh multiple local storage folders, each tracking a playlist:
+
+.. code-block:: console
+
+    cd /home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir
+    dmp3 . -r
+
 Usage in python script:
 
 .. code-block:: Python
