@@ -15,6 +15,7 @@ HEADERS = {
         }
     ],
     "age_limit": 18,
+    "ignoreerrors": True,
 }
 
 
@@ -51,7 +52,8 @@ def fetch_items_from_list(
 def already_downloaded_ids(folder: Path) -> List[str]:
     # already downloaded files
     files = [i.stem for i in folder.iterdir() if i.suffix == ".mp3"]
-    existing_ids = [re.findall(r"-([^-]*)$", file)[0] for file in files]
+    # the final 11 chars are the id
+    existing_ids = [file[-11:] for file in files]
     return existing_ids
 
 
@@ -64,11 +66,20 @@ def ids_from_list(target_urls: List[str]) -> List[str]:
 SAVE_FILE_FORMAT = "%(title)s-%(id)s.%(ext)s"
 
 
+def yt_dlp_download(webpath: str, headers: dict):
+    try:
+        with yt_dlp.YoutubeDL(headers) as ydl:
+            ydl.download([webpath])
+    except Exception as e:
+        print(e)
+
+
 def download_ids_and_convert_to_mp3(ids: List[str], folder: Path):
     headers = dict(HEADERS, outtmpl=f"{folder}/{SAVE_FILE_FORMAT}")
-    with yt_dlp.YoutubeDL(headers) as ydl:
-        for id in ids:
-            ydl.download([f"https://www.youtube.com/watch?v={id}"])
+    for id in ids:
+        yt_dlp_download(
+            webpath=f"https://www.youtube.com/watch?v={id}", headers=headers
+        )
 
 
 def download_list_subset_and_convert_to_mp3(
@@ -80,5 +91,4 @@ def download_list_subset_and_convert_to_mp3(
     if end is not None:
         headers["playlistend"] = end
 
-    with yt_dlp.YoutubeDL(headers) as ydl:
-        ydl.download([webpath])
+    yt_dlp_download(webpath=webpath, headers=headers)
