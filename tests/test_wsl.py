@@ -9,6 +9,8 @@ _dir = Path("/home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir")
 
 _playlist = "https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy"
 _folder = Path(_dir / "starcraft_terran")
+
+_playlist2 = "https://www.youtube.com/playlist?list=PL4C4D2047A5B1423D"
 _folder2 = Path(_dir / "diablo1")
 
 _video = "https://www.youtube.com/watch?v=mD4GbGmvNRc&list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy&index=2&ab_channel=Katrulzin"
@@ -101,14 +103,16 @@ def test_channel():
     assert number_of_mp3_files(_channel_folder) == 1
 
 
-# def test_refresh_channel():
-#     run(
-#         f"dmp3 {_channel_folder}",
-#     )
+def test_refresh_channel():
+    run(
+        f"dmp3 {_channel_folder}",
+    )
 
-#     assert Path(_channel_folder).exists()
-#     assert Path(_channel_folder / ".dmp3").exists()
-#     assert number_of_mp3_files(_channel_folder) == 1
+    # dmp3(folder=_channel_folder,)
+
+    assert Path(_channel_folder).exists()
+    assert Path(_channel_folder / ".dmp3").exists()
+    assert number_of_mp3_files(_channel_folder) == 1
 
 
 # playlist
@@ -163,13 +167,20 @@ def test_refresh_entire_playlist():
 
 
 def test_refresh_all_folders():
+    kill_dir(_folder2)
+    run(
+        f"dmp3 {_folder2} -w {_playlist2}",
+    )
+
     n = number_of_mp3_files(_folder)
     n2 = number_of_mp3_files(_folder2)
+    n3 = number_of_mp3_files(_video_folder)
+    n4 = number_of_mp3_files(_channel_folder)
 
     kill_mp3(_folder, 2)
     kill_mp3(_folder2, 2)
-    kill_dir(_video_folder)
-    kill_dir(_channel_folder)
+    # kill_dir(_video_folder)
+    # kill_dir(_channel_folder)
 
     run(
         f"dmp3 {_folder.parent} -r",
@@ -177,3 +188,5 @@ def test_refresh_all_folders():
 
     assert number_of_mp3_files(_folder) == n
     assert number_of_mp3_files(_folder2) == n2
+    assert number_of_mp3_files(_video_folder) == n3
+    assert number_of_mp3_files(_channel_folder) == n4
