@@ -15,13 +15,13 @@ Features:
 Installation
 ------------
 
-#. Install Python >= 3.9
+#. Install Python 3.9, 3.10, or 3.11.
 
-#. Install dmp3 package from pypi
+#. Install package from pypi.
 
     .. code-block:: console
 
-        pip install dmp3
+        pip install -U dmp3
 
 #. Install `FFMPEG <https://ffmpeg.org/>`_, it converts media formats. 
 
@@ -123,13 +123,13 @@ API
         options:
         -h, --help            show this help message and exit
         -w WEBPATH, --webpath WEBPATH
-                                Webpath to download from, creates a .dmp3 file insdie folder to store webpath
+                                Webpath to download from, creates a .dmp3 file insdie folder to store parameters
         -s START, --start START
                                 Start index of the playlist
         -e END, --end END     End index of the playlist
         -r, --refresh_folder_mode
-                                Refresh all mp3 folders in the folder, default is False.
-        -m MP3, --mp3 MP3     Convert mp4 files to mp3 files in the folder (WIP)
+                                Refresh all mp3 folders in the folder, default is False
+        -m MP3, --mp3 MP3     Convert video to mp3 files in the folder, default is True (WIP)
 
         Examples:
 

@@ -14,7 +14,7 @@ argparser.add_argument(
     "-w",
     "--webpath",
     type=str,
-    help="Webpath to download from, creates a .dmp3 file insdie folder to store webpath",
+    help="Webpath to download from, creates a .dmp3 file insdie folder to store parameters",
     default=None,
 )
 argparser.add_argument(
@@ -27,13 +27,13 @@ argparser.add_argument(
     "-r",
     "--refresh_folder_mode",
     action="store_true",
-    help=("Refresh all mp3 folders in the folder, default is False."),
+    help=("Refresh all mp3 folders in the folder, default is False"),
 )
 argparser.add_argument(
     "-m",
     "--mp3",
     type=bool,
-    help="Convert mp4 files to mp3 files in the folder (WIP)",
+    help="Convert video to mp3 files in the folder, default is True (WIP)",
     default=True,
 )
 
