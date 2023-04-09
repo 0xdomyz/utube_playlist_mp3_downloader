@@ -38,7 +38,7 @@ argparser.add_argument(
 )
 
 description = """
-Download youtube video or playlist or channel, convert to mp3, store into a folder.
+Download youtube video, playlist, channel. Convert to mp3, store into folder. Efficiently refresh mutiple storage folders.
 
 Creates folder if not exists.
 Otherwise only download additional mp3 into the folder.
@@ -94,12 +94,15 @@ def process_folder_and_webpath(
 
     # folder
     if not folder.exists():
+        print(f"Creating folder: {folder}")
         folder.mkdir(parents=True)
     existing_ids = already_downloaded_ids(folder)
+    print(f"No. of existing mp3 files: {len(existing_ids)}")
 
     # webpath
     if webpath is None:
         try:
+            print(f"Reading webpath from .dmp3 file in the folder: {folder}")
             info = read_saved_info(folder / ".dmp3")
             webpath = info["webpath"]
             start = info["start"] if "start" in info and start is None else start
@@ -111,10 +114,12 @@ def process_folder_and_webpath(
     else:
         info = kwargs.copy()
         info["folder"] = str(folder)
+        print(f"Saving webpath to .dmp3 file in the folder: {folder}")
         save_info(info=info, path=folder / ".dmp3")
 
     # logics
     webpath_type = parse_webpath(webpath)
+    print(f"Webpath type recognized as: {webpath_type}")
 
     if webpath_type == "video":
         id = id_from_video_webpath(webpath)
@@ -123,11 +128,14 @@ def process_folder_and_webpath(
     elif webpath_type in ["playlist", "channel"]:
         if len(existing_ids) > 0:
             if webpath_type == "playlist":
+                print(f"Fetcing playlist items: {webpath}")
                 target_urls = fetch_items_from_list(webpath, start, end)
             else:
+                print(f"Fetcing channel items: {webpath}")
                 target_urls = fetch_items_from_channel(webpath, start, end)
             target_ids = ids_from_list(target_urls)
             new_ids = list(set(target_ids) - set(existing_ids))
+            print(f"No. of new mp3 files to download: {len(new_ids)}")
             download_ids_and_convert_to_mp3(new_ids, folder)
         else:
             download_list_subset_and_convert_to_mp3(webpath, folder, start, end)
@@ -143,10 +151,11 @@ def dmp3(
     refresh_folder_mode: bool = False,
     mp3: bool = True,
 ):
-    # refresh all folders mode
     if refresh_folder_mode:
+        print("Refresh all folders mode")
         for sub_folder in folder.iterdir():
             if sub_folder.is_dir() and (sub_folder / ".dmp3").exists():
+                print(f"Processing folder: {sub_folder}")
                 process_folder_and_webpath(
                     folder=sub_folder,
                     webpath=None,
@@ -155,7 +164,7 @@ def dmp3(
                     mp3=mp3,
                 )
     else:
-        # vanilla mode
+        print("Single folder mode")
         process_folder_and_webpath(
             folder=folder,
             webpath=webpath,
