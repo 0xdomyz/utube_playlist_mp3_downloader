@@ -8,7 +8,7 @@ version = "0.0.7"
 authors = [
   { name="0xdomyz", email="septemberwhyms@gmail.com" },
 ]
-description = "Download youtube video or playlist or channel, convert to mp3, store into a folder."
+description = "Download youtube video, playlist, channel. Convert to mp3, store into folder. Efficiently refresh mutiple storage folders."
 readme = "README.rst"
 requires-python = ">=3.9"
 classifiers = [
