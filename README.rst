@@ -2,7 +2,7 @@
 DMP3
 ===============================
 
-Download youtube video or playlist or channel, convert to mp3, store into a folder.
+Download youtube video, playlist, channel. Convert to mp3, store into folder. Efficiently refresh mutiple storage folders.
 
 Features:
 
@@ -15,7 +15,7 @@ Features:
 Installation
 ------------
 
-#. Install Python 3.9 or 3.10 or 3.11.
+#. Install Python >= 3.9.
 
 #. Install package from pypi.
 
@@ -90,7 +90,7 @@ Usage in python script:
 
 .. code-block:: Python
 
-        from dmp3.dmp3 import dmp3
+        from dmp3 import dmp3
         from pathlib import Path
 
         folder = Path("/home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir/starcraft_terran")
@@ -106,7 +106,7 @@ API
    
         usage: dmp3 [-h] [-w WEBPATH] [-s START] [-e END] [-r] [-m MP3] folder
 
-        Download youtube video or playlist or channel, convert to mp3, store into a folder.
+        Download youtube video, playlist, channel. Convert to mp3, store into folder. Efficiently refresh mutiple storage folders.
 
         Creates folder if not exists.
         Otherwise only download additional mp3 into the folder.

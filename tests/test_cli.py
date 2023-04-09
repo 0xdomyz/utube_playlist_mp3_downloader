@@ -2,15 +2,15 @@ from pathlib import Path
 
 from terminal import run_cmd_on_path
 
-# from dmp3.dmp3 import dmp3
+# from dmp3 import dmp3
 
 # set up
 _dir = Path("/home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir")
 
-_playlist = "https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy"
+_playlist = "https://www.youtube.com/playlist?list=PLmXDcu9yx4WCHiLoBFvaXqC9ytNfTxvki"
 _folder = Path(_dir / "starcraft_terran")
 
-_playlist2 = "https://www.youtube.com/playlist?list=PL4C4D2047A5B1423D"
+_playlist2 = "https://www.youtube.com/playlist?list=PLmXDcu9yx4WDVK_u65DLeqAzmLkqfdhA3"
 _folder2 = Path(_dir / "diablo1")
 
 _video = "https://www.youtube.com/watch?v=mD4GbGmvNRc&list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy&index=2&ab_channel=Katrulzin"

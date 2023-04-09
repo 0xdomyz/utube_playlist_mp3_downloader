@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dmp3"
-version = "0.0.6"
+version = "0.0.7"
 authors = [
   { name="0xdomyz", email="septemberwhyms@gmail.com" },
 ]
@@ -22,6 +22,7 @@ classifiers = [
 dependencies = [
   "pytube",
   "yt-dlp",
+  "pyyaml",
 ]
 
 [project.urls]
