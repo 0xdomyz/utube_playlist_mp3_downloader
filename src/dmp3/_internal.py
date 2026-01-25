@@ -143,8 +143,16 @@ def yt_dlp_download(webpath: str, headers: dict):
         print(e)
 
 
-def download_ids_and_convert_to_mp3(ids: List[str], folder: Path):
-    headers = dict(HEADERS, outtmpl=f"{folder}/{SAVE_FILE_FORMAT}")
+def download_ids_and_convert_to_mp3(ids: List[str], folder: Path, mp3: bool = True):
+    if mp3:
+        headers = dict(HEADERS, outtmpl=f"{folder}/{SAVE_FILE_FORMAT}")
+    else:
+        headers = {
+            "format": "bestvideo+bestaudio/best",
+            "outtmpl": f"{folder}/{SAVE_FILE_FORMAT}",
+            "age_limit": 18,
+            "ignoreerrors": True,
+        }
     for id in ids:
         yt_dlp_download(
             webpath=f"https://www.youtube.com/watch?v={id}", headers=headers
@@ -152,9 +160,17 @@ def download_ids_and_convert_to_mp3(ids: List[str], folder: Path):
 
 
 def download_list_subset_and_convert_to_mp3(
-    webpath: str, folder: Path, start: int = None, end: int = None
+    webpath: str, folder: Path, start: int = None, end: int = None, mp3: bool = True
 ):
-    headers = dict(HEADERS, outtmpl=f"{folder}/{SAVE_FILE_FORMAT}")
+    if mp3:
+        headers = dict(HEADERS, outtmpl=f"{folder}/{SAVE_FILE_FORMAT}")
+    else:
+        headers = {
+            "format": "bestvideo+bestaudio/best",
+            "outtmpl": f"{folder}/{SAVE_FILE_FORMAT}",
+            "age_limit": 18,
+            "ignoreerrors": True,
+        }
     if start is not None:
         headers["playliststart"] = start
     if end is not None:

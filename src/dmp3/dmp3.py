@@ -32,9 +32,8 @@ argparser.add_argument(
 argparser.add_argument(
     "-m",
     "--mp3",
-    type=bool,
-    help="Convert video to mp3 files in the folder, default is True (WIP)",
-    default=True,
+    action="store_false",
+    help="Download video without converting to mp3 (by default converts to mp3)",
 )
 
 description = """
@@ -124,7 +123,7 @@ def process_folder_and_webpath(
     if webpath_type == "video":
         id = id_from_video_webpath(webpath)
         if id not in existing_ids:
-            download_ids_and_convert_to_mp3([id], folder)
+            download_ids_and_convert_to_mp3([id], folder, mp3)
     elif webpath_type in ["playlist", "channel"]:
         if len(existing_ids) > 0:
             if webpath_type == "playlist":
@@ -136,9 +135,9 @@ def process_folder_and_webpath(
             target_ids = ids_from_list(target_urls)
             new_ids = list(set(target_ids) - set(existing_ids))
             print(f"No. of new mp3 files to download: {len(new_ids)}")
-            download_ids_and_convert_to_mp3(new_ids, folder)
+            download_ids_and_convert_to_mp3(new_ids, folder, mp3)
         else:
-            download_list_subset_and_convert_to_mp3(webpath, folder, start, end)
+            download_list_subset_and_convert_to_mp3(webpath, folder, start, end, mp3)
     else:
         raise ValueError(f"Unknown webpath type: {webpath_type}")
 
