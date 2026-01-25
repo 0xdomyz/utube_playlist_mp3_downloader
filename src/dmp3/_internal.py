@@ -131,13 +131,6 @@ def yt_dlp_download(webpath: str, headers: dict):
 
 HEADERS = {
     "format": "bestaudio/best",
-    "postprocessors": [
-        {
-            "key": "FFmpegExtractAudio",
-            "preferredcodec": "mp3",
-            "preferredquality": "192",
-        }
-    ],
     "age_limit": 18,
     "ignoreerrors": True,
 }
@@ -146,15 +139,21 @@ HEADERS = {
 def make_download_headers(
     folder: Path, mp3: bool = True, start: int = None, end: int = None
 ):
+    headers = HEADERS.copy()
+    headers["outtmpl"] = f"{folder}/{SAVE_FILE_FORMAT}"
+
     if mp3:
-        headers = dict(HEADERS, outtmpl=f"{folder}/{SAVE_FILE_FORMAT}")
+        headers["postprocessors"] = [
+            {
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": "192",
+            }
+        ]
     else:
-        headers = {
-            "format": "bestvideo+bestaudio/best",
-            "outtmpl": f"{folder}/{SAVE_FILE_FORMAT}",
-            "age_limit": 18,
-            "ignoreerrors": True,
-        }
+        # Download full video when not converting to MP3
+        headers["format"] = "bestvideo+bestaudio/best"
+
     if start is not None:
         headers["playliststart"] = start
     if end is not None:
