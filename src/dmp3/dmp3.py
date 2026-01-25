@@ -30,8 +30,9 @@ argparser.add_argument(
     help=("Refresh all mp3 folders in the folder, default is False"),
 )
 argparser.add_argument(
-    "-m",
-    "--mp3",
+    "-v",
+    "--video",
+    dest="mp3",
     action="store_false",
     help="Download video without converting to mp3 (by default converts to mp3)",
 )
@@ -51,6 +52,12 @@ If not provided, uses saved parameters if any.
 
 epilog = """
 Examples:
+
+A video as mp3:
+dmp3 . -w "https://www.youtube.com/watch?v=mD4GbGmvNRc"
+
+A video:
+dmp3 . -v -w "https://www.youtube.com/watch?v=mD4GbGmvNRc"
 
 Entire playlist:
 cd /home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir
@@ -106,6 +113,7 @@ def process_folder_and_webpath(
             webpath = info["webpath"]
             start = info["start"] if "start" in info and start is None else start
             end = info["end"] if "end" in info and end is None else end
+            mp3 = info["mp3"] if "mp3" in info else True
         except FileNotFoundError:
             raise Exception(
                 f"No webpath provided and no .dmp3 file found in the folder: {folder}"
