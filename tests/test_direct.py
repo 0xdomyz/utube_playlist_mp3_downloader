@@ -3,7 +3,7 @@ from pathlib import Path
 from dmp3 import dmp3
 
 # set up
-_dir = Path("/home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir")
+_dir = Path(__file__).resolve().parent / "mp3_dir"
 
 _playlist = "https://www.youtube.com/playlist?list=PLmXDcu9yx4WCHiLoBFvaXqC9ytNfTxvki"
 _folder = Path(_dir / "starcraft_terran")
