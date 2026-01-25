@@ -18,20 +18,6 @@ def save_info(info, path: Path):
         yaml.safe_dump(info, f)
 
 
-HEADERS = {
-    "format": "bestaudio/best",
-    "postprocessors": [
-        {
-            "key": "FFmpegExtractAudio",
-            "preferredcodec": "mp3",
-            "preferredquality": "192",
-        }
-    ],
-    "age_limit": 18,
-    "ignoreerrors": True,
-}
-
-
 def fetch_items_from_channel(
     webpath: str, start: int = None, end: int = None
 ) -> List[str]:
@@ -143,24 +129,22 @@ def yt_dlp_download(webpath: str, headers: dict):
         print(e)
 
 
-def download_ids_and_convert_to_mp3(ids: List[str], folder: Path, mp3: bool = True):
-    if mp3:
-        headers = dict(HEADERS, outtmpl=f"{folder}/{SAVE_FILE_FORMAT}")
-    else:
-        headers = {
-            "format": "bestvideo+bestaudio/best",
-            "outtmpl": f"{folder}/{SAVE_FILE_FORMAT}",
-            "age_limit": 18,
-            "ignoreerrors": True,
+HEADERS = {
+    "format": "bestaudio/best",
+    "postprocessors": [
+        {
+            "key": "FFmpegExtractAudio",
+            "preferredcodec": "mp3",
+            "preferredquality": "192",
         }
-    for id in ids:
-        yt_dlp_download(
-            webpath=f"https://www.youtube.com/watch?v={id}", headers=headers
-        )
+    ],
+    "age_limit": 18,
+    "ignoreerrors": True,
+}
 
 
-def download_list_subset_and_convert_to_mp3(
-    webpath: str, folder: Path, start: int = None, end: int = None, mp3: bool = True
+def make_download_headers(
+    folder: Path, mp3: bool = True, start: int = None, end: int = None
 ):
     if mp3:
         headers = dict(HEADERS, outtmpl=f"{folder}/{SAVE_FILE_FORMAT}")
@@ -175,5 +159,19 @@ def download_list_subset_and_convert_to_mp3(
         headers["playliststart"] = start
     if end is not None:
         headers["playlistend"] = end
+    return headers
 
+
+def download_ids_and_convert_to_mp3(ids: List[str], folder: Path, mp3: bool = True):
+    headers = make_download_headers(folder, mp3)
+    for id in ids:
+        yt_dlp_download(
+            webpath=f"https://www.youtube.com/watch?v={id}", headers=headers
+        )
+
+
+def download_list_subset_and_convert_to_mp3(
+    webpath: str, folder: Path, start: int = None, end: int = None, mp3: bool = True
+):
+    headers = make_download_headers(folder, mp3, start, end)
     yt_dlp_download(webpath=webpath, headers=headers)
