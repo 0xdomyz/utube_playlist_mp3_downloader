@@ -11,6 +11,7 @@ Features:
 - Download only additional items, once local storage folder is created
 - Refresh local storage folder with saved parameters
 - Refresh multiple local storage folders
+- Download as video or convert to mp3
 
 Installation
 ------------
@@ -53,6 +54,12 @@ Windows:
 .. code-block:: console
 
     dmp3 "D:\media\music\game_theme\starcraft_terran" -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy
+
+Download as video instead of mp3:
+
+.. code-block:: console
+
+    dmp3 starcraft_terran -w https://www.youtube.com/playlist?list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy -v
 
 Example results:
 
@@ -98,13 +105,14 @@ Usage in python script:
 
         dmp3(folder=folder)
         dmp3(folder=folder, webpath=webpath, start=1, end=3, refresh_folder_mode=False, mp3=True)
+        dmp3(folder=folder, webpath=webpath, mp3=False)  # Download as video
 
 API
 -------
 
    .. code-block:: console
    
-        usage: dmp3 [-h] [-w WEBPATH] [-s START] [-e END] [-r] [-m MP3] folder
+        usage: dmp3 [-h] [-w WEBPATH] [-s START] [-e END] [-r] [-v] folder
 
         Download youtube video, playlist, channel. Convert to mp3, store into folder. Efficiently refresh mutiple storage folders.
 
@@ -129,9 +137,15 @@ API
         -e END, --end END     End index of the playlist
         -r, --refresh_folder_mode
                                 Refresh all mp3 folders in the folder, default is False
-        -m MP3, --mp3 MP3     Convert video to mp3 files in the folder, default is True (WIP)
+        -v, --video           Download video without converting to mp3 (by default converts to mp3)
 
         Examples:
+
+        A video as mp3:
+        dmp3 . -w "https://www.youtube.com/watch?v=mD4GbGmvNRc"
+
+        A video:
+        dmp3 . -v -w "https://www.youtube.com/watch?v=mD4GbGmvNRc"
 
         Entire playlist:
         cd /home/user/Projects/utube_playlist_mp3_downloader/tests/mp3_dir
