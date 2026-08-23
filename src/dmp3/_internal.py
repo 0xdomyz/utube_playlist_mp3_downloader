@@ -2,7 +2,6 @@ import re
 from pathlib import Path
 from typing import List
 
-import pytube
 import yaml
 import yt_dlp
 
@@ -23,7 +22,7 @@ def fetch_items_from_channel(
 ) -> List[str]:
     headers = {
         "flat_playlist": True,
-        "age_limit": 18,
+        # "age_limit": 18,
         "ignoreerrors": True,
     }
     if start is not None:
@@ -38,32 +37,29 @@ def fetch_items_from_channel(
 def fetch_items_from_list(
     playlist_url: str, start: int = None, end: int = None
 ) -> List[str]:
-    playlist = pytube.Playlist(playlist_url)
-    res = playlist.video_urls
-    res_len = len(res)
-
-    # bound start
+    ydl_opts = {
+        "extract_flat": True,
+        "ignoreerrors": True,
+    }
     if start is not None:
-        if start > res_len:
-            return []
-        elif start < 1:
-            start = 0
-    # bound end
+        ydl_opts["playliststart"] = start
     if end is not None:
-        if end > res_len:
-            end = res_len
-        elif end < 1:
-            return []
+        ydl_opts["playlistend"] = end
 
-    # slice, index start from 1
-    if start is not None and end is not None:
-        res = res[start - 1 : end]
-    elif start is not None:
-        res = res[start - 1 :]
-    elif end is not None:
-        res = res[:end]
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        playlist = ydl.extract_info(playlist_url, download=False)
 
-    return res
+    if not playlist:
+        return []
+
+    entries = playlist.get("entries") or []
+    return [
+        video.get("webpage_url")
+        or video.get("url")
+        or f"https://www.youtube.com/watch?v={video.get('id')}"
+        for video in entries
+        if video
+    ]
 
 
 def already_downloaded_ids(folder: Path) -> List[str]:
@@ -131,9 +127,14 @@ def yt_dlp_download(webpath: str, headers: dict):
 
 HEADERS = {
     "format": "bestaudio/best",
-    "age_limit": 18,
+    # "age_limit": 18,
     "ignoreerrors": True,
 }
+
+# load cookies from home directory if exists
+COOKIE_FILE = Path.home() / ".youtube-cookies.txt"
+if COOKIE_FILE.exists():
+    HEADERS["cookiefile"] = str(COOKIE_FILE)
 
 
 def make_download_headers(
