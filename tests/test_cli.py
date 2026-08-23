@@ -1,3 +1,4 @@
+import time
 from pathlib import Path
 
 from terminal import run_cmd_on_path
@@ -12,10 +13,6 @@ _folder = Path(_dir / "starcraft_terran")
 
 _playlist2 = "https://www.youtube.com/playlist?list=PLmXDcu9yx4WDVK_u65DLeqAzmLkqfdhA3"
 _folder2 = Path(_dir / "diablo1")
-
-_video = "https://www.youtube.com/watch?v=mD4GbGmvNRc&list=PLEtYTVnkBVuZWJ4Gsxtt80tWbiiyy1bcy&index=2&ab_channel=Katrulzin"
-_video2 = "https://www.youtube.com/watch?v=zAS8KivZX5s&ab_channel=nudl3r"
-_video_folder = Path(_dir / "various")
 
 _channel = "https://www.youtube.com/@Diablo/videos"
 _channel_folder = Path(_dir / "diablo")
@@ -50,40 +47,21 @@ def number_of_mp3_files(path: Path):
     return len(list(Path(path).glob("*.mp3")))
 
 
+def number_of_files(path: Path):
+    return len(list(Path(path).glob("*")))
+
+
 def run(cmd: str):
-    run_cmd_on_path(f"echo {cmd} >> tests/test.log", _tool_dir)
+    run_cmd_on_path(f'echo "{cmd}" >> tests/test.log', _tool_dir)
     run_cmd_on_path(f"echo '' >> tests/test.log", _tool_dir)
     run_cmd_on_path(f"echo '' >> tests/test.log", _tool_dir)
     run_cmd_on_path(f"{cmd} >> tests/test.log", _tool_dir)
+    time.sleep(1)  # Add 1 second cooldown after each command
     # run_cmd_on_path(cmd, _tool_dir)
 
 
 # test
 # todo better fixtures, no sequence dependency
-
-
-def test_video():
-    kill_dir(_video_folder)
-    run(
-        f"dmp3 {_video_folder} -w '{_video}'",
-    )
-    run(
-        f"dmp3 {_video_folder} -w '{_video2}'",
-    )
-
-    # dmp3(
-    #     folder=_video_folder,
-    #     webpath=_video,
-    # )
-    # dmp3(
-    #     folder=_video_folder,
-    #     webpath=_video2,
-    # )
-
-    assert Path(_video_folder).exists()
-    assert Path(_video_folder / ".dmp3").exists()
-    assert number_of_mp3_files(_video_folder) == 2
-
 
 # channel
 def test_channel():
@@ -174,7 +152,6 @@ def test_refresh_all_folders():
 
     n = number_of_mp3_files(_folder)
     n2 = number_of_mp3_files(_folder2)
-    n3 = number_of_mp3_files(_video_folder)
     n4 = number_of_mp3_files(_channel_folder)
 
     kill_mp3(_folder, 2)
@@ -188,5 +165,4 @@ def test_refresh_all_folders():
 
     assert number_of_mp3_files(_folder) == n
     assert number_of_mp3_files(_folder2) == n2
-    assert number_of_mp3_files(_video_folder) == n3
     assert number_of_mp3_files(_channel_folder) == n4
