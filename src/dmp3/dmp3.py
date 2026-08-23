@@ -134,6 +134,7 @@ def process_folder_and_webpath(
             download_ids_and_convert_to_mp3([id], folder, mp3)
     elif webpath_type in ["playlist", "channel"]:
         if len(existing_ids) > 0:
+            # import pdb; pdb.set_trace()
             if webpath_type == "playlist":
                 print(f"Fetcing playlist items: {webpath}")
                 target_urls = fetch_items_from_list(webpath, start, end)
@@ -141,8 +142,9 @@ def process_folder_and_webpath(
                 print(f"Fetcing channel items: {webpath}")
                 target_urls = fetch_items_from_channel(webpath, start, end)
             target_ids = ids_from_list(target_urls)
+            print(f"No. of remote files to download: {len(target_ids)}")
             new_ids = list(set(target_ids) - set(existing_ids))
-            print(f"No. of new mp3 files to download: {len(new_ids)}")
+            print(f"No. of new files to download: {len(new_ids)}")
             download_ids_and_convert_to_mp3(new_ids, folder, mp3)
         else:
             download_list_subset_and_convert_to_mp3(webpath, folder, start, end, mp3)
